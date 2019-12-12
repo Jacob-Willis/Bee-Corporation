@@ -47,8 +47,8 @@ export class ColonySelectorComponent implements OnInit {
         `,
       })
       .valueChanges.subscribe((result: any) => {
-        if (this.colonyList.length === 0) {
-          this.colonyList = result.data.colony;
+        this.colonyList = result.data.colony;
+        if (this.selectedColony === undefined) {
           this.selectedColony = this.colonyList[0];
         }
         this.calculateData();
@@ -99,17 +99,9 @@ export class ColonySelectorComponent implements OnInit {
     this.apollo.mutate({
       mutation: ADD_COLLECTIONINFO,
       variables: { _colony_id: colonyId, _collectionDate: collectionDate, _collectionAmount: collectionAmount },
-    }).subscribe(( data: any ) => {
+    }).subscribe((data: any) => {
       console.log('inserted data', data);
-      const newCollectionInfo = {
-        id: data.insert_collectionInfo.returning[0].id,
-        colony_id: data.insert_collectionInfo.returning[0].colony_id,
-        collectionAmount: data.insert_collectionInfo.returning[0].collectionAmount,
-        collectionDate: data.insert_collectionInfo.returning[0].collectionDate,
-      } as IcollectionInfo;
-      this.selectedColony.collectionInfo.push(newCollectionInfo);
-      this.calculateData();
-      return newCollectionInfo;
+      this.queryData();
     }, (error) => {
       console.log('there was an error sending the query', error);
     });
@@ -138,7 +130,7 @@ export class ColonySelectorComponent implements OnInit {
     this.apollo.mutate({
       mutation: ADD_NEWCOLONY,
       variables: { _name: name, _beeCount: beeCount, _hiveCount: hiveCount },
-    }).subscribe(( data: any ) => {
+    }).subscribe((data: any) => {
       console.log('inserted data', data);
       const newColony = {
         id: data.insert_colony.returning[0].id,
@@ -212,6 +204,7 @@ export class ColonySelectorComponent implements OnInit {
         collectionAmount: this.honeyCollected,
         collectionDate: new Date(this.honeyCollectionDate)
       };
+      this.selectedColony.collectionInfo.push(newCollection);
       this.insertCollectionData(this.selectedColony.id, new Date(this.honeyCollectionDate), this.honeyCollected);
       this.honeyCollectionDate = new Date();
       this.honeyCollected = 0;
