@@ -27,7 +27,6 @@ export class ColonySelectorComponent implements OnInit {
   ngOnInit() {
     this.queryData();
   }
-
   queryData() {
     this.apollo
       .watchQuery({
@@ -47,7 +46,7 @@ export class ColonySelectorComponent implements OnInit {
         }
         `,
       })
-      .valueChanges.subscribe(result => {
+      .valueChanges.subscribe((result: any) => {
         if (this.colonyList.length === 0) {
           this.colonyList = result.data.colony;
           this.selectedColony = this.colonyList[0];
@@ -100,7 +99,7 @@ export class ColonySelectorComponent implements OnInit {
     this.apollo.mutate({
       mutation: ADD_COLLECTIONINFO,
       variables: { _colony_id: colonyId, _collectionDate: collectionDate, _collectionAmount: collectionAmount },
-    }).subscribe(({ data }) => {
+    }).subscribe(( data: any ) => {
       console.log('inserted data', data);
       const newCollectionInfo = {
         id: data.insert_collectionInfo.returning[0].id,
@@ -139,7 +138,7 @@ export class ColonySelectorComponent implements OnInit {
     this.apollo.mutate({
       mutation: ADD_NEWCOLONY,
       variables: { _name: name, _beeCount: beeCount, _hiveCount: hiveCount },
-    }).subscribe(({ data }) => {
+    }).subscribe(( data: any ) => {
       console.log('inserted data', data);
       const newColony = {
         id: data.insert_colony.returning[0].id,
@@ -214,7 +213,6 @@ export class ColonySelectorComponent implements OnInit {
         collectionDate: new Date(this.honeyCollectionDate)
       };
       this.insertCollectionData(this.selectedColony.id, new Date(this.honeyCollectionDate), this.honeyCollected);
-      this.selectedColony.collectionInfo.push(newCollection);
       this.honeyCollectionDate = new Date();
       this.honeyCollected = 0;
       this.calculateData();
