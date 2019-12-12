@@ -71,7 +71,7 @@ export class ColonySelectorComponent implements OnInit {
     this.apollo.mutate({
       mutation: TOGGLE_COLONY,
       variables: { id: this.selectedColony.id, _beeCount: this.selectedColony.beeCount, _hiveCount: this.selectedColony.hiveCount },
-    }).subscribe(({ data, loading }) => {
+    }).subscribe(({ data }) => {
       console.log('got data', data);
     }, (error) => {
       console.log('there was an error sending the query', error);
@@ -100,7 +100,7 @@ export class ColonySelectorComponent implements OnInit {
     this.apollo.mutate({
       mutation: ADD_COLLECTIONINFO,
       variables: { _colony_id: colonyId, _collectionDate: collectionDate, _collectionAmount: collectionAmount },
-    }).subscribe(({ data, loading }) => {
+    }).subscribe(({ data }) => {
       console.log('inserted data', data);
       const newCollectionInfo = {
         id: data.insert_collectionInfo.returning[0].id,
@@ -139,9 +139,8 @@ export class ColonySelectorComponent implements OnInit {
     this.apollo.mutate({
       mutation: ADD_NEWCOLONY,
       variables: { _name: name, _beeCount: beeCount, _hiveCount: hiveCount },
-    }).subscribe(({ data, loading }) => {
+    }).subscribe(({ data }) => {
       console.log('inserted data', data);
-      // data.insert_colony.returning[0]
       const newColony = {
         id: data.insert_colony.returning[0].id,
         name: data.insert_colony.returning[0].name,
@@ -180,6 +179,7 @@ export class ColonySelectorComponent implements OnInit {
       const colonyName = 'Colony ' + (this.colonyList.length + 1);
       this.insertNewColony(colonyName, colonyBeeCount, colonyHiveCount);
     }
+    this.calculateData();
   }
 
   updateHiveCount() {
