@@ -1,0 +1,49 @@
+table {
+  width: 100%;
+  max-height: 100px;
+}
+
+table,
+th,
+td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 15px;
+}
+
+th {
+  text-align: left;
+}
+
+.collectionData {
+  height: 250px;
+  width: 500px;
+  padding: 0px;
+  overflow: auto;
+}
+
+.collectContainer {
+  padding: 10px;
+}
+
+button {
+  height: 25px;
+  margin: 5px;
+}
+
+input {
+  height: 25px;
+}
+
+select {
+  height: 25px;
+}
+
+.message {
+  color: red;
+  font-weight: bold;
+}
