@@ -164,7 +164,6 @@ export class ColonySelectorComponent implements OnInit {
   }
 
   selectColony(event: any) {
-    console.log(event);
     if (event.value === 'New Colony') {
       const colonyBeeCount = 0;
       const colonyHiveCount = 0;
