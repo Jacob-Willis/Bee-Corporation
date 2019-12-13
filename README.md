@@ -2,6 +2,13 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.20.
 
+Make sure that npm is installed onto your computer to run.
+
+run:
+'npm install -g @angular/cli@8'
+'npm install' if there are more errors to initialise the npm libraries
+
+
 ## Hasura link:
 
 https://bee-corporation-on-postgress.herokuapp.com/console/data/schema/public
