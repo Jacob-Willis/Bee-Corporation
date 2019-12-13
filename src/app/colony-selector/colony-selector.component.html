@@ -1,51 +1,51 @@
-<p>colony-selector works!</p>
+<div *ngIf="colonyList !== null;">
+  <select class="colony-selector" [(ngModel)]="selectedColony" (change)="selectColony($event.target)">
+    <option *ngFor="let colony of colonyList" [ngValue]="colony">{{colony.name}}</option>
+    <option>New Colony</option>
+  </select>
 
-<select class="colony-selector" [(ngModel)]="selectedColony" (change)="selectColony($event.target)">
-  <option *ngFor="let colony of colonyList" [ngValue]="colony">{{colony.name}}</option>
-  <option>New Colony</option>
-</select>
-
-<div class="colonySize">
-  <div>
-    <label>Estimated number of bees: </label>
-    <input type="number" ngModel="{{selectedColony.beeCount}}" (input)="updateBeeCount($event.target)" />
-  </div>
-  <div>
-    <label>Number of Hives: </label>
-    <label>{{selectedColony.hiveCount}}</label>
-  </div>
-</div>
-
-<div class="collectionData">
-  <table>
-    <tr>
-      <th>Date</th>
-      <th>Amount Collected (g)</th>
-    </tr>
-    <tr *ngFor="let data of selectedColony.collectionInfo; let i = index">
-      <td>{{data.collectionDate | date:'EEEE, MMMM d, y'}}</td>
-      <td>{{data.collectionAmount}}</td>
-    </tr>
-  </table>
-</div>
-
-<div class="collectContainer">
-  <input class="dateSelection" type="date" max="{{today | date:'yyyy-MM-dd'}}"
-    [ngModel]="honeyCollectionDate | date:'yyyy-MM-dd'" (change)="updateHoneyCollectionDate($event.target)" />
-  <button class="btnCollect" (click)="collectHoney()">Collect</button>
-  |
-  <button class="btnAddHive" (click)="updateHiveCount()">Add new hive</button>
-</div>
-
-<div class="information">
-  <div>
-    <label>Next dollection date: </label>
-    <label>{{nextCollectionDate | date:'EEEE, MMMM d, y'}}</label>
-  </div>
-  <div [ngClass]="(overproduction > 250) ? 'message' : ''">
-    <label>Overproduction: </label>
-    <label>{{overproduction}}</label>
+  <div class="colonySize">
+    <div>
+      <label>Estimated number of bees: </label>
+      <input type="number" *ngIf="selectedColony !== undefined;" ngModel="{{selectedColony.beeCount}}" (input)="updateBeeCount($event.target)" />
+    </div>
+    <div>
+      <label>Number of Hives: </label>
+      <label *ngIf="selectedColony !== undefined;">{{selectedColony.hiveCount}}</label>
+    </div>
   </div>
 
-  <label class="message" *ngIf="isOverProduction">New hive is needed!</label>
+  <div class="collectionData">
+    <table *ngIf="selectedColony !== undefined;">
+      <tr>
+        <th>Date</th>
+        <th>Amount Collected (g)</th>
+      </tr>
+      <tr *ngFor="let data of selectedColony.collectionInfo; let i = index">
+        <td>{{data.collectionDate | date:'EEEE, MMMM d, y'}}</td>
+        <td>{{data.collectionAmount}}</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="collectContainer">
+    <input class="dateSelection" type="date" max="{{today | date:'yyyy-MM-dd'}}"
+      [ngModel]="honeyCollectionDate | date:'yyyy-MM-dd'" (change)="updateHoneyCollectionDate($event.target)" />
+    <button class="btnCollect" (click)="collectHoney()">Collect</button>
+    |
+    <button class="btnAddHive" (click)="updateHiveCount()">Add new hive</button>
+  </div>
+
+  <div class="information">
+    <div>
+      <label>Next dollection date: </label>
+      <label>{{nextCollectionDate | date:'EEEE, MMMM d, y'}}</label>
+    </div>
+    <div [ngClass]="(overproduction > 250) ? 'message' : ''">
+      <label>Overproduction: </label>
+      <label>{{overproduction}}</label>
+    </div>
+
+    <label class="message" *ngIf="isOverProduction">New hive is needed!</label>
+  </div>
 </div>

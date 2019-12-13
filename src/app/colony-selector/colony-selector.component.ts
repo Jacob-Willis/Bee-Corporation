@@ -148,7 +148,7 @@ export class ColonySelectorComponent implements OnInit {
     });
   }
 
-  private calculateData() {
+  calculateData() {
     this.calculateCollectionDate();
     this.calculateOverproduction();
     this.updateData();
@@ -164,6 +164,7 @@ export class ColonySelectorComponent implements OnInit {
   }
 
   selectColony(event: any) {
+    console.log(event);
     if (event.value === 'New Colony') {
       const colonyBeeCount = 0;
       const colonyHiveCount = 0;
@@ -212,7 +213,7 @@ export class ColonySelectorComponent implements OnInit {
     }
   }
 
-  calculateOverproduction() {
+  private calculateOverproduction() {
     const differenceInTime = new Date().getTime() -
       new Date(this.selectedColony.collectionInfo[this.selectedColony.collectionInfo.length - 1].collectionDate).getTime();
 
