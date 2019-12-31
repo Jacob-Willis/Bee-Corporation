@@ -101,7 +101,8 @@ export class ColonySelectorComponent implements OnInit {
       variables: { _colony_id: colonyId, _collectionDate: collectionDate, _collectionAmount: collectionAmount },
     }).subscribe((data: any) => {
       console.log('inserted data', data);
-      this.queryData();
+      this.selectedColony.collectionInfo.push(data.data.insert_collectionInfo.returning[0]);
+      this.calculateData();
     }, (error) => {
       console.log('there was an error sending the query', error);
     });
@@ -133,16 +134,15 @@ export class ColonySelectorComponent implements OnInit {
     }).subscribe((data: any) => {
       console.log('inserted data', data);
       const newColony = {
-        id: data.insert_colony.returning[0].id,
-        name: data.insert_colony.returning[0].name,
-        beeCount: data.insert_colony.returning[0].beeCount,
-        hiveCount: data.insert_colony.returning[0].hiveCount,
+        id: data.data.insert_colony.returning[0].id,
+        name: data.data.insert_colony.returning[0].name,
+        beeCount: data.data.insert_colony.returning[0].beeCount,
+        hiveCount: data.data.insert_colony.returning[0].hiveCount,
         collectionInfo: []
       } as Icolony;
       this.colonyList.push(newColony);
       this.selectedColony = newColony;
       this.insertCollectionData(newColony.id, new Date(), 0);
-      this.calculateData();
     }, (error) => {
       console.log('there was an error sending the query', error);
     });
@@ -158,7 +158,7 @@ export class ColonySelectorComponent implements OnInit {
     if (this.selectedColony.collectionInfo.length === 0) {
       this.nextCollectionDate = new Date();
     } else {
-      this.nextCollectionDate = new Date(this.selectedColony.collectionInfo[0].collectionDate);
+      this.nextCollectionDate = new Date(this.selectedColony.collectionInfo[this.selectedColony.collectionInfo.length - 1].collectionDate);
       this.nextCollectionDate.setDate(this.nextCollectionDate.getDate() + 6);
     }
   }
@@ -169,8 +169,9 @@ export class ColonySelectorComponent implements OnInit {
       const colonyHiveCount = 0;
       const colonyName = 'Colony ' + (this.colonyList.length + 1);
       this.insertNewColony(colonyName, colonyBeeCount, colonyHiveCount);
+    } else {
+      this.calculateData();
     }
-    this.calculateData();
   }
 
   updateHiveCount() {
@@ -215,7 +216,6 @@ export class ColonySelectorComponent implements OnInit {
   private calculateOverproduction() {
     const differenceInTime = new Date().getTime() -
       new Date(this.selectedColony.collectionInfo[this.selectedColony.collectionInfo.length - 1].collectionDate).getTime();
-
     const differenceInDays = differenceInTime / (1000 * 60 * 60 * 24);
     this.overproduction = (this.selectedColony.beeCount / this.selectedColony.hiveCount) * differenceInDays * 0.26;
 
